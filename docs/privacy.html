@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hearth Privacy</title>
+  <meta name="description" content="What Hearth stores, what it sends, and to whom.">
+  <link rel="icon" href="assets/logo.svg">
+  <style>
+    :root { --bg: #0d0e11; --surface: #191c22; --line: #2a2f39; --fg: #e8eaef; --dim: #a4aab7; --ember: #ff7a3d; }
+    @media (prefers-color-scheme: light) {
+      :root { --bg: #f7f6f3; --surface: #ffffff; --line: #dedad3; --fg: #1d1f24; --dim: #4f5560; --ember: #ae4218; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.65 "Segoe UI", system-ui, sans-serif; }
+    a { color: var(--ember); }
+    main { max-width: 760px; margin: 0 auto; padding: clamp(1.5rem, 5vw, 3.5rem) 16px 4rem; }
+    header a { display: inline-flex; align-items: center; gap: .55rem; color: var(--fg); text-decoration: none; font-weight: 600; }
+    h1 { font-size: clamp(2rem, 5vw, 2.6rem); line-height: 1.15; margin: 2rem 0 .4rem; }
+    h2 { font-size: 1.25rem; margin: 2.2rem 0 .5rem; }
+    p, li { color: var(--dim); }
+    strong { color: var(--fg); }
+    .updated { margin: 0; font-size: .92rem; }
+    .summary { margin-top: 1.4rem; padding: 1rem 1.2rem; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+    .summary p { margin: 0; color: var(--fg); }
+    table { width: 100%; border-collapse: collapse; margin-top: .6rem; font-size: .95rem; }
+    th, td { text-align: left; vertical-align: top; padding: .55rem .6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--fg); font-weight: 600; }
+    td { color: var(--dim); }
+    code { font-family: "Cascadia Mono", Consolas, monospace; font-size: .9em; overflow-wrap: anywhere; }
+    @media (max-width: 560px) { table, thead, tbody, tr, th, td { display: block; } thead { display: none; } td { border: 0; padding: .15rem 0; } tr { border-bottom: 1px solid var(--line); padding: .6rem 0; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><a href="./"><img src="assets/logo.svg" alt="" width="28" height="28"> Hearth</a></header>
+
+    <h1>Privacy</h1>
+    <p class="updated">Last updated 24 November 2026</p>
+
+    <div class="summary">
+      <p><strong>Short version:</strong> Hearth runs on your PC. There is no Hearth account, no Hearth server, no analytics and no tracking. Hearth only talks to the services listed below, and only to do what you asked.</p>
+    </div>
+
+    <h2>What Hearth connects to</h2>
+    <table>
+      <thead><tr><th>Service</th><th>Why</th><th>What is sent</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nexus Mods</strong></td><td>Browsing mods, downloads, collections, update checks</td><td>Your Nexus Mods API key or sign-in, and the ids of the mods and files you look at or download. The built-in browser is the Nexus Mods website itself, and its cookies stay on your PC.</td></tr>
+        <tr><td><strong>GitHub</strong></td><td>Checking for Hearth updates; downloading the LOOT masterlist for load-order sorting</td><td>A normal web request for the update file or masterlist. No personal details.</td></tr>
+        <tr><td><strong>Steam's image server</strong></td><td>Game artwork</td><td>A request for a game's public header image.</td></tr>
+        <tr><td><strong>Anthropic</strong> (only if you turn on Ask Hearth)</td><td>Answering your questions</td><td>Your messages plus the details the assistant looks up to answer: your game, mod names and versions, load order, health issues and recent Hearth log lines. Folder paths, your Windows user name and keys are removed first. This uses your own Anthropic API key and is covered by Anthropic's terms and privacy policy.</td></tr>
+      </tbody>
+    </table>
+    <p>Mods themselves come from the download servers Nexus Mods hands Hearth for each file.</p>
+
+    <h2>What Hearth stores on your PC</h2>
+    <ul>
+      <li><strong>Your Nexus Mods and Anthropic credentials</strong> are kept in Windows Credential Manager, never in Hearth's own files or logs.</li>
+      <li><strong>Settings, your mod list, profiles, downloads and Ask Hearth chats</strong> are kept in Hearth's folder under <code>%APPDATA%\Hearth</code>.</li>
+      <li><strong>Log files</strong> help with troubleshooting. They stay on your PC and are never uploaded.</li>
+      <li><strong>The built-in browser</strong> keeps its cookies and cache in Hearth's local app-data folder, like any browser.</li>
+    </ul>
+    <p>Uninstalling Hearth removes the program. To remove your data too, delete <code>%APPDATA%\Hearth</code>, and remove the Hearth entries from Windows Credential Manager.</p>
+
+    <h2>Problem reports</h2>
+    <p>"Report a problem" creates a zip file on your PC. Before saving it, Hearth removes your Windows user name, folder paths, computer name, email addresses and keys, and shows you exactly what is included. Nothing is sent anywhere unless you choose to share the file yourself.</p>
+
+    <h2>What Hearth never does</h2>
+    <ul>
+      <li>It never sells, shares or collects your data, and there is no telemetry.</li>
+      <li>It never changes your game folder until you turn a mod on, and it can put the folder back the way it was.</li>
+      <li>It never clicks downloads on Nexus Mods for you, and Ask Hearth never changes your setup without your confirmation.</li>
+    </ul>
+
+    <h2>Questions</h2>
+    <p>Open an issue on the <a href="https://github.com/RobbyBobby77/hearth-releases/issues">Hearth downloads page</a>.</p>
+  </main>
+</body>
+</html>

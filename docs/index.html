@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hearth is a fast, friendly Windows mod manager for Nexus Mods games, built with Rust and Tauri.">
+  <meta name="theme-color" content="#0d0e11">
+  <title>Hearth · A mod manager for Windows</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d0e11;
+      --panel: #13151a;
+      --surface: #191c22;
+      --line: #2a2f39;
+      --fg: #e8eaef;
+      --dim: #a4aab7;
+      --ember: #ff7a3d;
+      --ember-hi: #ff9a66;
+      --ember-lo: #3a2016;
+      font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--fg); line-height: 1.6; }
+    a { color: var(--ember-hi); text-underline-offset: .2em; }
+    a:focus-visible { outline: 2px solid var(--ember-hi); outline-offset: 5px; }
+    img { display: block; max-width: 100%; height: auto; }
+    h1, h2, h3, p, figure { margin: 0; }
+    h1, h2, h3 { line-height: 1.12; letter-spacing: -.036em; }
+    h2 { font-size: clamp(1.9rem, 4vw, 3.1rem); }
+    h3 { font-size: 1.19rem; }
+    p { color: var(--dim); }
+    .shell { width: min(1120px, calc(100% - 3rem)); margin-inline: auto; }
+    .skip { position: absolute; left: 1rem; top: -5rem; z-index: 3; padding: .65rem 1rem; background: var(--surface); }
+    .skip:focus { top: 1rem; }
+    .masthead { position: relative; z-index: 1; border-bottom: 1px solid #21252c; background: #0d0e11e6; }
+    .bar { min-height: 72px; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .brand { display: flex; gap: .7rem; align-items: center; color: var(--fg); text-decoration: none; font-weight: 700; font-size: 1.16rem; letter-spacing: -.02em; }
+    nav { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(.8rem, 3vw, 1.8rem); }
+    nav a { text-decoration: none; color: var(--dim); font-size: .93rem; }
+    nav a:hover { color: var(--fg); }
+    .hero {
+      position: relative; overflow: clip; padding-block: clamp(3.5rem, 8vw, 7rem) 3rem;
+      background: radial-gradient(ellipse 48% 48% at 50% 36%, #3a211a 0%, transparent 100%);
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(#ffffff06 1px, transparent 1px), linear-gradient(90deg, #ffffff06 1px, transparent 1px);
+      background-size: 44px 44px; mask-image: radial-gradient(ellipse at 50% 32%, #000, transparent 70%);
+    }
+    .hero-content { position: relative; text-align: center; }
+    .hero .eyebrow { color: var(--ember-hi); font-size: .93rem; font-weight: 650; letter-spacing: .08em; }
+    .hero h1 { font-size: clamp(3.2rem, 8.8vw, 6.8rem); letter-spacing: -.077em; margin: .35rem 0 1.1rem; }
+    .hero p { max-width: 640px; margin-inline: auto; font-size: clamp(1.07rem, 2.4vw, 1.28rem); }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin: 1.8rem 0 2.9rem; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border: 1px solid #424550; background: var(--surface); border-radius: 8px; color: var(--fg); padding: .55rem 1.05rem; text-decoration: none; font-weight: 650; }
+    .button:hover { border-color: var(--ember-hi); }
+    .primary { background: var(--ember); color: #1a0d06; border-color: var(--ember); }
+    .primary:hover { background: var(--ember-hi); }
+    .frame { border: 1px solid #36323a; border-radius: 15px; display: block; overflow: hidden; background: var(--panel); }
+    .hero .frame { box-shadow: 0 36px 92px #0009, 0 0 48px #ff7a3d14; max-width: 990px; margin-inline: auto; }
+    .frame img { width: 100%; }
+    figcaption { color: var(--dim); margin-top: .7rem; font-size: .94rem; }
+    .section { padding-block: clamp(3.2rem, 8vw, 5.7rem); border-top: 1px solid #21252c; }
+    .intro { max-width: 650px; margin-bottom: 2rem; }
+    .intro p { margin-top: .65rem; font-size: 1.07rem; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--line); }
+    .card { padding: clamp(1.2rem, 3vw, 1.8rem); background: var(--panel); }
+    .card h3 { display: flex; gap: .65rem; align-items: baseline; }
+    .card h3::before { content: ""; width: 7px; height: 7px; flex: 0 0 7px; border-radius: 2px; background: var(--ember); }
+    .card p { margin-top: .6rem; }
+    .split { display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: clamp(1.6rem, 5vw, 4.5rem); }
+    .steps { margin: 1.5rem 0 0; padding-left: 1.45rem; }
+    .steps li { padding-left: .25rem; margin-bottom: .9rem; color: var(--dim); }
+    .steps li::marker { color: var(--ember-hi); font-weight: 650; }
+    .steps strong { color: var(--fg); }
+    .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.7rem 1.25rem; }
+    .gallery img { aspect-ratio: 8 / 5; }
+    .games { display: flex; flex-wrap: wrap; list-style: none; gap: .5rem; padding: 0; margin: 1.4rem 0 0; }
+    .games li { padding: .35rem .75rem; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; color: var(--fg); font-size: .94rem; }
+    .download { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: clamp(1.6rem, 5vw, 3.5rem); border-radius: 16px; border: 1px solid #4a342c; background: linear-gradient(125deg, #2d1d18, #15161b 70%); }
+    .download p { margin-top: .7rem; max-width: 570px; }
+    footer { padding-block: 1.8rem 2.5rem; border-top: 1px solid #21252c; color: var(--dim); font-size: .92rem; }
+    footer .shell { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .8rem; }
+    @media (max-width: 790px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .split { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 510px) {
+      .shell { width: calc(100% - 2rem); }
+      .bar { min-height: 64px; }
+      nav { gap: .85rem; }
+      nav a[href="#screenshots"] { display: none; }
+      .grid, .gallery { grid-template-columns: 1fr; }
+      .download { align-items: flex-start; flex-direction: column; }
+      .actions { margin-bottom: 2rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="masthead">
+    <div class="bar shell">
+      <a class="brand" href="#"><img src="assets/logo.svg" alt="" width="35" height="35"> Hearth</a>
+      <nav aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#download">Download</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="shell hero-content">
+        <p class="eyebrow">Windows mod manager</p>
+        <h1>Hearth</h1>
+        <p>Browse Nexus Mods, install collections, and manage your load order from one app.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/RobbyBobby77/hearth-releases/releases/latest">Download for Windows</a>
+          <a class="button" href="#features">Explore features</a>
+        </div>
+        <figure>
+          <a class="frame" href="assets/mods.png"><img src="assets/mods.png" width="1280" height="800" alt="Hearth’s Mods view showing an enabled Skyrim mod list, file conflicts, and deployment controls."></a>
+          <figcaption>Hearth showing a sample Skyrim mod setup.</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="section" id="features">
+      <div class="shell">
+        <div class="intro"><h2>From browsing to playing</h2></div>
+        <div class="grid">
+          <article class="card"><h3>One-click collections</h3><p>Preview a collection, pick optional mods, and follow installation progress in Hearth.</p></article>
+          <article class="card"><h3>Built-in Nexus browser</h3><p>Browse mod pages and start Mod Manager Downloads inside the app.</p></article>
+          <article class="card"><h3>Fast hardlink deployment</h3><p>Deploy without duplicating files on the same drive. Originals are backed up and restored when you purge.</p></article>
+          <article class="card"><h3>Clear health checks</h3><p>See which mods need a missing plugin, runtime, or framework, with a suggested fix.</p></article>
+          <article class="card"><h3>Load order and LOOT</h3><p>Sort Bethesda plugins with LOOT and manage active Baldur’s Gate 3 packages in the Public profile.</p></article>
+          <article class="card"><h3>Cyberpunk support</h3><p>Hearth places common archives, script mods, and framework files in the folders Cyberpunk expects, and shows which archives win.</p></article>
+          <article class="card"><h3>Mod updates, safely</h3><p>See newer versions of your mods and update in a click. Mods from a collection are protected, because the collection was tested with their current version.</p></article>
+          <article class="card"><h3>Ask Hearth</h3><p>An optional helper for mod problems that uses your own Anthropic API key. It looks at your setup before answering and never changes anything without your click.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="collections">
+      <div class="shell split">
+        <div>
+          <h2>How collections work</h2>
+          <ol class="steps">
+            <li><strong>Preview the collection.</strong> See what it includes and choose the optional mods you want.</li>
+            <li><strong>Start the install.</strong> Nexus Premium downloads run automatically. On a free account, Hearth opens each download page and tracks the files you select.</li>
+            <li><strong>Deploy and check your setup.</strong> Hearth installs the selected files and applies the collection’s order where supported.</li>
+          </ol>
+        </div>
+        <figure><a class="frame" href="assets/collections.png"><img loading="lazy" src="assets/collections.png" width="1280" height="800" alt="The Hearth Collections view with a selection of example collections."></a></figure>
+      </div>
+    </section>
+    <section class="section" id="screenshots">
+      <div class="shell">
+        <div class="intro"><h2>A look inside Hearth</h2><p>Manage downloads, choose a theme, and start from a detected game. These screens use sample data.</p></div>
+        <div class="gallery">
+          <figure><a class="frame" href="assets/welcome.png"><img loading="lazy" src="assets/welcome.png" width="1280" height="800" alt="First-run welcome screen offering to manage a detected Cyberpunk 2077 install."></a><figcaption>First-run setup</figcaption></figure>
+          <figure><a class="frame" href="assets/plugins.png"><img loading="lazy" src="assets/plugins.png" width="1280" height="800" alt="Bethesda plugin load order with activation toggles and the Sort with LOOT button."></a><figcaption>Plugin load order</figcaption></figure>
+          <figure><a class="frame" href="assets/downloads.png"><img loading="lazy" src="assets/downloads.png" width="1280" height="800" alt="Hearth’s download queue showing mods ready for install and completed downloads."></a><figcaption>Download queue</figcaption></figure>
+          <figure><a class="frame" href="assets/settings.png"><img loading="lazy" src="assets/settings.png" width="1280" height="800" alt="Hearth settings showing six available interface themes."></a><figcaption>Appearance and themes</figcaption></figure>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="games">
+      <div class="shell">
+        <h2>Supported games</h2>
+        <ul class="games">
+          <li>Baldur’s Gate 3</li><li>Cyberpunk 2077</li><li>Enderal Special Edition</li>
+          <li>Fallout 3 and GOTY</li><li>Fallout 4</li><li>Fallout 4 VR</li><li>Fallout: New Vegas</li>
+          <li>Kingdom Come: Deliverance II</li><li>Oblivion (classic)</li><li>Oblivion Remastered</li>
+          <li>Skyrim Classic / Legendary Edition</li><li>Skyrim Special Edition</li>
+          <li>Skyrim VR</li><li>Stardew Valley</li><li>Starfield</li><li>The Sims 4</li><li>The Witcher 3: Wild Hunt</li>
+        </ul>
+      </div>
+    </section>
+    <section class="section" id="download">
+      <div class="shell download">
+        <div><h2>Download Hearth</h2><p>Free for Windows 10 and 11. Download <strong>Hearth_&lt;version&gt;_x64-setup.exe</strong> from the latest release and run it. After that, Hearth keeps itself up to date: when a new version is ready, it shows <em>Restart to update</em>. Every update is signed, and each release includes its source code.</p></div>
+        <a class="button primary" href="https://github.com/RobbyBobby77/hearth-releases/releases/latest">Latest release</a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell"><span>Hearth is free software under GNU GPL v3.</span><span>Independent of Nexus Mods and the game publishers.</span><span><a href="privacy.html">Privacy</a></span></div></footer>
+</body>
+</html>
