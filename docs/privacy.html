@@ -36,7 +36,7 @@
     <header><a href="./"><img src="assets/logo.svg" alt="" width="28" height="28"> Hearth</a></header>
 
     <h1>Privacy</h1>
-    <p class="updated">Last updated 24 November 2026</p>
+    <p class="updated">Last updated 25 November 2026</p>
 
     <div class="summary">
       <p><strong>Short version:</strong> Hearth runs on your PC. There is no Hearth account, no Hearth server, no analytics and no tracking. Hearth only talks to the services listed below, and only to do what you asked.</p>
@@ -49,19 +49,20 @@
         <tr><td><strong>Nexus Mods</strong></td><td>Browsing mods, downloads, collections, update checks</td><td>Your Nexus Mods API key or sign-in, and the ids of the mods and files you look at or download. The built-in browser is the Nexus Mods website itself, and its cookies stay on your PC.</td></tr>
         <tr><td><strong>GitHub</strong></td><td>Checking for Hearth updates; downloading the LOOT masterlist for load-order sorting</td><td>A normal web request for the update file or masterlist. No personal details.</td></tr>
         <tr><td><strong>Steam's image server</strong></td><td>Game artwork</td><td>A request for a game's public header image.</td></tr>
-        <tr><td><strong>Anthropic</strong> (only if you turn on Ask Hearth)</td><td>Answering your questions</td><td>Your messages plus the details the assistant looks up to answer: your game, mod names and versions, load order, health issues and recent Hearth log lines. Folder paths, your Windows user name and keys are removed first. This uses your own Anthropic API key and is covered by Anthropic's terms and privacy policy.</td></tr>
       </tbody>
     </table>
     <p>Mods themselves come from the download servers Nexus Mods hands Hearth for each file.</p>
 
     <h2>What Hearth stores on your PC</h2>
     <ul>
-      <li><strong>Your Nexus Mods and Anthropic credentials</strong> are kept in Windows Credential Manager, never in Hearth's own files or logs.</li>
-      <li><strong>Settings, your mod list, profiles, downloads and Ask Hearth chats</strong> are kept in Hearth's folder under <code>%APPDATA%\Hearth</code>.</li>
+      <li><strong>Your Nexus Mods credentials</strong> are kept in Windows Credential Manager, never in Hearth's own files or logs.</li>
+      <li><strong>Settings, your mod list, profiles and downloads</strong> are kept in Hearth's folder under <code>%APPDATA%\Hearth</code>.</li>
       <li><strong>Log files</strong> help with troubleshooting. They stay on your PC and are never uploaded.</li>
       <li><strong>The built-in browser</strong> keeps its cookies and cache in Hearth's local app-data folder, like any browser.</li>
     </ul>
     <p>Uninstalling Hearth removes the program. To remove your data too, delete <code>%APPDATA%\Hearth</code>, and remove the Hearth entries from Windows Credential Manager.</p>
+
+    <p>Earlier versions offered Ask Hearth, an optional AI assistant. It has been removed. If you saved a key for it, you can delete the 'Hearth Mod Manager' entries ending in '-api-key' in Windows Credential Manager. Keep the <code>nexus-api-key</code> entry for Nexus Mods. To remove old chats, delete the <code>assistant</code> folder inside <code>%APPDATA%\Hearth</code>.</p>
 
     <h2>Problem reports</h2>
     <p>"Report a problem" creates a zip file on your PC. Before saving it, Hearth removes your Windows user name, folder paths, computer name, email addresses and keys, and shows you exactly what is included. Nothing is sent anywhere unless you choose to share the file yourself.</p>
@@ -70,7 +71,7 @@
     <ul>
       <li>It never sells, shares or collects your data, and there is no telemetry.</li>
       <li>It never changes your game folder until you turn a mod on, and it can put the folder back the way it was.</li>
-      <li>It never clicks downloads on Nexus Mods for you, and Ask Hearth never changes your setup without your confirmation.</li>
+      <li>It never clicks downloads on Nexus Mods for you.</li>
     </ul>
 
     <h2>Questions</h2>
